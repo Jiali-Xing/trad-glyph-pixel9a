@@ -1,13 +1,13 @@
 # Pixel 9a (LineageOS 23) 字體美化指南：上古黑體 (Shanggu Sans)
 
-這份文檔記錄了如何在 **Pixel 9a (tegu)** 從刷機、Root 到字體美化的全過程：**LineageOS 23 (Android 16)** 正確 Root 並替換系統字體為 **[上古黑體 (Shanggu Sans)](https://github.com/GuiWonder/Shanggu)**。
+這份文檔記錄了如何在 **Pixel 9a (tegu)** 從刷機、Root 到字體美化的全過程：**LineageOS 23 (Android 16)** 正確 Root 並替換系統字體為傳統字型 **[尚古黑體 (Shanggu Sans)](https://github.com/GuiWonder/Shanggu)**。
 
 由於 Android 16 的分區變動和字體渲染引擎更新，傳統的 Root 和換字體方法會導致 **Bootloop (卡開機)**。本文包含了詳細的避坑指南和救磚方案。
 
 ## ⚠️ 核心摘要 (TL;DR)
 
 1. **Root 坑**：Pixel 9a 的 Ramdisk 在 `init_boot` 分區，**不要** Patch `boot.img`，否則無效或軟磚。
-2. **字體坑**：Android 16 強制要求 Variable Font (VF)。CFI 模組需要關閉自動修正 (`Correction=0`) 才能正常開機。
+2. **字體坑**：CFI 模組在 Android 16 上需要 fix 才能正常開機。 
 3. **救命指令**：卡 Logo 時使用 `adb wait-for-device shell magisk --remove-modules`。
 
 ---
@@ -106,10 +106,10 @@ adb push ShangguSerif-VF_TTFs/ShangguSerif-VF.ttf /sdcard/OhMyFont/CFI/msi.ttf
 
 ### 3. 配置 Config (關鍵防磚設定 ⚠️)
 
-默認的 CFI 配置在 Android 16 上會導致 Bootloop。必須建立一個 `config.cfg` 並推送到 `/sdcard/OhMyFont/`。
+默認的 CFI 配置在 Android 16 上會導致 Bootloop。請把本repo提供的 `config.cfg` 推送到 `/sdcard/OhMyFont/`。
 
 **config.cfg 內容：**
-參見 [config.cfg 文件](./config.cfg) 的示例。我做了偷懶的設定，將所有字體位都指向了上古黑體的可變字體版本，並且關閉了自動修正功能。
+參見 [config.cfg 文件](./config.cfg) 的示例。我做了偷懶的設定，將所有字體位都指向了上古黑體的可變字體版本。
 
 **推送配置：**
 
@@ -145,8 +145,7 @@ adb wait-for-device shell magisk --remove-modules
 
 這是 App 內置字體策略導致的。
 
-* **解法**：安裝 **LSPosed** (Zygisk) + **AOSPMods**。
-* 在 AOSPMods 中強制覆蓋 System UI 和特定 App 的字體設置。
+* **解法** 設置手機的語言為 **中文 (香港)**，這樣所有 App 就會使用系統字體了。
 
 ---
 
